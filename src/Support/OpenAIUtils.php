@@ -46,45 +46,43 @@ class OpenAIUtils
     /**
      * Parse a Server-Sent Events stream into individual data chunks.
      *
+     * Uses fgets() to read one line at a time instead of fread() which
+     * can batch multiple SSE events into a single read. This ensures
+     * each event is yielded to the consumer as soon as it arrives from
+     * the upstream, enabling smooth real-time streaming.
+     *
      * @param resource $stream The raw HTTP response stream.
      * @return \Generator<array> Yields decoded JSON data from each SSE event.
      */
     public static function parseSSEStream($stream): \Generator
     {
-        $buffer = '';
-
         while (!feof($stream)) {
-            $chunk = fread($stream, 8192);
-            if ($chunk === false) {
+            // fgets reads one line at a time (up to newline or buffer limit).
+            // This is critical for streaming: it returns each SSE line as
+            // soon as it arrives, rather than buffering multiple events.
+            $line = fgets($stream, 65536);
+            if ($line === false) {
                 break;
             }
 
-            $buffer .= $chunk;
+            $line = rtrim($line, "\r\n");
 
-            // Process complete lines
-            while (($newlinePos = strpos($buffer, "\n")) !== false) {
-                $line = substr($buffer, 0, $newlinePos);
-                $buffer = substr($buffer, $newlinePos + 1);
+            if ($line === '') {
+                continue;
+            }
 
-                $line = rtrim($line, "\r");
+            // SSE data lines
+            if (str_starts_with($line, 'data: ')) {
+                $data = substr($line, 6);
 
-                if ($line === '') {
-                    continue;
+                // Stream end signal
+                if ($data === '[DONE]') {
+                    return;
                 }
 
-                // Check for data prefixed lines
-                if (str_starts_with($line, 'data: ')) {
-                    $data = substr($line, 6);
-
-                    // Stream end signal
-                    if ($data === '[DONE]') {
-                        return;
-                    }
-
-                    $decoded = json_decode($data, true);
-                    if ($decoded !== null) {
-                        yield $decoded;
-                    }
+                $decoded = json_decode($data, true);
+                if ($decoded !== null) {
+                    yield $decoded;
                 }
             }
         }
