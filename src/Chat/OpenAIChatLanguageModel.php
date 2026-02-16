@@ -514,11 +514,15 @@ class OpenAIChatLanguageModel implements LanguageModel
             $type = $tool['type'] ?? 'function';
 
             if ($type === 'function') {
+                $rawParams = $tool['inputSchema'] ?? $tool['parameters'] ?? new \stdClass();
+                $isStrict = $tool['strict'] ?? false;
+                $params = OpenAIUtils::prepareJsonSchema($rawParams, $isStrict);
+
                 $def = [
                     'type' => 'function',
                     'function' => [
                         'name' => $tool['name'] ?? '',
-                        'parameters' => $tool['inputSchema'] ?? $tool['parameters'] ?? new \stdClass(),
+                        'parameters' => $params,
                     ],
                 ];
 

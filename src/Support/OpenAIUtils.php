@@ -105,4 +105,72 @@ class OpenAIUtils
         }
         return $combined;
     }
+
+    /**
+     * Prepare a JSON schema for OpenAI strict mode.
+     *
+     * When strict mode is enabled OpenAI requires every object in the
+     * schema to include `"additionalProperties": false`. This method
+     * recursively injects that property so users don't have to
+     * remember to add it themselves.
+     *
+     * @param array|object $schema The JSON Schema to prepare.
+     * @param bool $strict Whether strict mode is active.
+     * @return array|object The prepared schema (same type as input).
+     */
+    public static function prepareJsonSchema(array|object $schema, bool $strict = true): array|object
+    {
+        if (!$strict) {
+            return $schema;
+        }
+
+        if ($schema instanceof \stdClass) {
+            return $schema; // empty schema placeholder
+        }
+
+        return self::injectAdditionalProperties($schema);
+    }
+
+    /**
+     * Recursively inject `additionalProperties: false` on every
+     * object-typed node in a JSON Schema.
+     */
+    private static function injectAdditionalProperties(array $schema): array
+    {
+        $type = $schema['type'] ?? null;
+
+        // Object type → ensure additionalProperties is set
+        if ($type === 'object') {
+            if (!array_key_exists('additionalProperties', $schema)) {
+                $schema['additionalProperties'] = false;
+            }
+
+            // Recurse into properties
+            if (isset($schema['properties']) && is_array($schema['properties'])) {
+                foreach ($schema['properties'] as $key => $prop) {
+                    if (is_array($prop)) {
+                        $schema['properties'][$key] = self::injectAdditionalProperties($prop);
+                    }
+                }
+            }
+        }
+
+        // Array → recurse into items
+        if ($type === 'array' && isset($schema['items']) && is_array($schema['items'])) {
+            $schema['items'] = self::injectAdditionalProperties($schema['items']);
+        }
+
+        // anyOf / oneOf / allOf
+        foreach (['anyOf', 'oneOf', 'allOf'] as $combiner) {
+            if (isset($schema[$combiner]) && is_array($schema[$combiner])) {
+                foreach ($schema[$combiner] as $i => $sub) {
+                    if (is_array($sub)) {
+                        $schema[$combiner][$i] = self::injectAdditionalProperties($sub);
+                    }
+                }
+            }
+        }
+
+        return $schema;
+    }
 }

@@ -712,12 +712,14 @@ class OpenAIResponsesLanguageModel implements LanguageModel
 
             if ($type === 'function') {
                 $strict = $providerOptions['strictJsonSchema'] ?? true;
+                $rawParams = $tool['inputSchema'] ?? $tool['parameters'] ?? new \stdClass();
+                $params = OpenAIUtils::prepareJsonSchema($rawParams, $strict);
 
                 $openaiTools[] = [
                     'type' => 'function',
                     'name' => $tool['name'] ?? '',
                     'description' => $tool['description'] ?? '',
-                    'parameters' => $tool['inputSchema'] ?? $tool['parameters'] ?? new \stdClass(),
+                    'parameters' => $params,
                     'strict' => $strict,
                 ];
             } else {
