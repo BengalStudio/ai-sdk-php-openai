@@ -391,7 +391,7 @@ class OpenAIChatLanguageModel implements LanguageModel
                 yield [
                     'type' => 'text-delta',
                     'id' => '0',
-                    'delta' => $delta['content'],
+                    'textDelta' => $delta['content'],
                 ];
             }
 

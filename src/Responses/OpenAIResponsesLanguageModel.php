@@ -115,11 +115,25 @@ class OpenAIResponsesLanguageModel implements LanguageModel
         // Response format
         if ($options->responseFormat !== null) {
             $type = $options->responseFormat['type'] ?? null;
+            $schema = $options->responseFormat['schema'] ?? null;
 
-            if ($type === 'json') {
+            if ($type === 'json' && $schema !== null) {
+                // JSON mode with schema → use json_schema format
+                $name = $options->responseFormat['name'] ?? $this->schemaName($schema) ?? 'response';
+                $strict = $providerOptions['strictJsonSchema'] ?? true;
+
+                $args['text'] = [
+                    'format' => [
+                        'type' => 'json_schema',
+                        'name' => $name,
+                        'schema' => $schema,
+                        'strict' => $strict,
+                    ],
+                ];
+            } elseif ($type === 'json') {
                 $args['text'] = ['format' => ['type' => 'json_object']];
             } elseif ($type === 'json_schema') {
-                $schema = $options->responseFormat['schema'] ?? [];
+                $schema = $schema ?? [];
                 $name = $options->responseFormat['name'] ?? 'response';
                 $strict = $providerOptions['strictJsonSchema'] ?? true;
 
@@ -516,7 +530,7 @@ class OpenAIResponsesLanguageModel implements LanguageModel
                     yield [
                         'type' => 'text-delta',
                         'id' => '0',
-                        'delta' => $chunk['delta'] ?? '',
+                        'textDelta' => $chunk['delta'] ?? '',
                     ];
                     break;
 
@@ -873,6 +887,14 @@ class OpenAIResponsesLanguageModel implements LanguageModel
     private function isReasoningModel(string $modelId): bool
     {
         return (bool) preg_match('/^(o1|o3|o4)/', $modelId);
+    }
+
+    /**
+     * Extract a schema name from a JSON Schema definition.
+     */
+    private function schemaName(array $schema): ?string
+    {
+        return $schema['title'] ?? $schema['$id'] ?? null;
     }
 
     /**

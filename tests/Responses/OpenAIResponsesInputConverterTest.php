@@ -177,15 +177,22 @@ class OpenAIResponsesInputConverterTest extends TestCase
         ])];
         $result = OpenAIResponsesInputConverter::convert($prompt);
 
+        // Text content becomes an assistant message, tool call is a top-level item
+        $this->assertCount(2, $result['input']);
+
+        // First item: assistant message with text
         $msg = $result['input'][0];
         $this->assertSame('assistant', $msg['role']);
-        $this->assertCount(2, $msg['content']);
+        $this->assertCount(1, $msg['content']);
         $this->assertSame('output_text', $msg['content'][0]['type']);
         $this->assertSame('Checking...', $msg['content'][0]['text']);
-        $this->assertSame('function_call', $msg['content'][1]['type']);
-        $this->assertSame('call_abc', $msg['content'][1]['call_id']);
-        $this->assertSame('search', $msg['content'][1]['name']);
-        $this->assertSame('{"q":"weather"}', $msg['content'][1]['arguments']);
+
+        // Second item: top-level function_call
+        $fc = $result['input'][1];
+        $this->assertSame('function_call', $fc['type']);
+        $this->assertSame('call_abc', $fc['call_id']);
+        $this->assertSame('search', $fc['name']);
+        $this->assertSame('{"q":"weather"}', $fc['arguments']);
     }
 
     // Tool messages

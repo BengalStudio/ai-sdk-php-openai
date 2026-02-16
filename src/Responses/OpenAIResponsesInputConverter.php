@@ -57,7 +57,10 @@ class OpenAIResponsesInputConverter
                     break;
 
                 case 'assistant':
-                    $input[] = self::convertAssistantMessage($message);
+                    $assistantItems = self::convertAssistantMessage($message);
+                    foreach ($assistantItems as $item) {
+                        $input[] = $item;
+                    }
                     break;
 
                 case 'tool':
@@ -184,31 +187,39 @@ class OpenAIResponsesInputConverter
 
     /**
      * Convert an assistant message to Responses API format.
+     *
+     * Returns an array of input items:
+     * - Text content becomes a {role: assistant, content: ...} message
+     * - Tool calls become top-level {type: function_call, ...} items
+     *
+     * @return array<array>
      */
     private static function convertAssistantMessage(Message $message): array
     {
         if (is_string($message->content)) {
-            return [
+            return [[
                 'role' => 'assistant',
                 'content' => $message->content,
-            ];
+            ]];
         }
 
-        // Build output items for the assistant turn
-        $parts = [];
+        $items = [];
+        $textParts = [];
+
         foreach ($message->content as $part) {
             $type = $part['type'] ?? 'text';
 
             switch ($type) {
                 case 'text':
-                    $parts[] = [
+                    $textParts[] = [
                         'type' => 'output_text',
                         'text' => $part['text'] ?? '',
                     ];
                     break;
 
                 case 'tool-call':
-                    $parts[] = [
+                    // Tool calls are top-level items in the Responses API
+                    $items[] = [
                         'type' => 'function_call',
                         'call_id' => $part['toolCallId'] ?? '',
                         'name' => $part['toolName'] ?? '',
@@ -220,10 +231,15 @@ class OpenAIResponsesInputConverter
             }
         }
 
-        return [
-            'role' => 'assistant',
-            'content' => $parts,
-        ];
+        // Add text message if any text parts exist
+        if (!empty($textParts)) {
+            array_unshift($items, [
+                'role' => 'assistant',
+                'content' => $textParts,
+            ]);
+        }
+
+        return $items;
     }
 
     /**
