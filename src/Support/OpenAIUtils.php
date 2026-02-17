@@ -46,45 +46,52 @@ class OpenAIUtils
     /**
      * Parse a Server-Sent Events stream into individual data chunks.
      *
-     * Uses fgets() to read one line at a time instead of fread() which
-     * can batch multiple SSE events into a single read. This ensures
-     * each event is yielded to the consumer as soon as it arrives from
-     * the upstream, enabling smooth real-time streaming.
+     * Reads one byte at a time from the upstream stream (inspired by
+     * ai-services' Stream_Response::read_line). This ensures each SSE
+     * event is yielded to the consumer the instant it arrives, with
+     * zero read-ahead buffering that could batch multiple events.
      *
      * @param resource $stream The raw HTTP response stream.
      * @return \Generator<array> Yields decoded JSON data from each SSE event.
      */
     public static function parseSSEStream($stream): \Generator
     {
+        // Disable PHP-level read buffering on this stream so each
+        // fread(1) returns immediately when data is available.
+        stream_set_read_buffer($stream, 0);
+
+        $line = '';
+
         while (!feof($stream)) {
-            // fgets reads one line at a time (up to newline or buffer limit).
-            // This is critical for streaming: it returns each SSE line as
-            // soon as it arrives, rather than buffering multiple events.
-            $line = fgets($stream, 65536);
-            if ($line === false) {
+            $byte = fread($stream, 1);
+            if ($byte === false || $byte === '') {
                 break;
             }
 
-            $line = rtrim($line, "\r\n");
+            if ($byte === "\n") {
+                $line = rtrim($line, "\r");
 
-            if ($line === '') {
+                // Process the completed line
+                if (str_starts_with($line, 'data: ')) {
+                    $data = substr($line, 6);
+
+                    // Stream end signal
+                    if ($data === '[DONE]') {
+                        return;
+                    }
+
+                    $decoded = json_decode($data, true);
+                    if ($decoded !== null) {
+                        yield $decoded;
+                    }
+                }
+
+                // Reset for the next line
+                $line = '';
                 continue;
             }
 
-            // SSE data lines
-            if (str_starts_with($line, 'data: ')) {
-                $data = substr($line, 6);
-
-                // Stream end signal
-                if ($data === '[DONE]') {
-                    return;
-                }
-
-                $decoded = json_decode($data, true);
-                if ($decoded !== null) {
-                    yield $decoded;
-                }
-            }
+            $line .= $byte;
         }
     }
 
