@@ -20,7 +20,7 @@ if (file_exists($envFile)) {
     }
 }
 
-use function AISdkPhp\OpenAI\createOpenAI;
+use function BengalStudio\AI\OpenAI\createOpenAI;
 use function BengalStudio\AI\embed;
 use function BengalStudio\AI\embedMany;
 use function BengalStudio\AI\cosineSimilarity;

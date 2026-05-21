@@ -1,6 +1,6 @@
 # API Reference — OpenAI Provider
 
-Complete API reference for the `ai-sdk-php/openai` package.
+Complete API reference for the `bengal-studio/ai-sdk-openai` package.
 
 ## Table of Contents
 
@@ -15,7 +15,7 @@ Complete API reference for the `ai-sdk-php/openai` package.
 
 ## Functions
 
-All functions are in the `AISdkPhp\OpenAI` namespace.
+All functions are in the `BengalStudio\AI\OpenAI` namespace.
 
 ### `createOpenAI(array $settings = []): OpenAIProvider`
 

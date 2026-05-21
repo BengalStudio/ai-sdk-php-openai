@@ -20,7 +20,7 @@ if (file_exists($envFile)) {
     }
 }
 
-use function AISdkPhp\OpenAI\createOpenAI;
+use function BengalStudio\AI\OpenAI\createOpenAI;
 use function BengalStudio\AI\generateObject;
 use function BengalStudio\AI\streamObject;
 

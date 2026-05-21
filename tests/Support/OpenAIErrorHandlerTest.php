@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AISdkPhp\OpenAI\Tests\Support;
+namespace BengalStudio\AI\OpenAI\Tests\Support;
 
-use AISdkPhp\OpenAI\Support\OpenAIErrorHandler;
+use BengalStudio\AI\OpenAI\Support\OpenAIErrorHandler;
 use BengalStudio\AI\Exceptions\APICallException;
 use PHPUnit\Framework\TestCase;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AISdkPhp\OpenAI\Responses;
+namespace BengalStudio\AI\OpenAI\Responses;
 
 use BengalStudio\AI\Types\Message;
 

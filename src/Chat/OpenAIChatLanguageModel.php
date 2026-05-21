@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace AISdkPhp\OpenAI\Chat;
+namespace BengalStudio\AI\OpenAI\Chat;
 
-use AISdkPhp\OpenAI\Support\OpenAIConfig;
-use AISdkPhp\OpenAI\Support\OpenAIErrorHandler;
-use AISdkPhp\OpenAI\Support\OpenAIUtils;
+use BengalStudio\AI\OpenAI\Support\OpenAIConfig;
+use BengalStudio\AI\OpenAI\Support\OpenAIErrorHandler;
+use BengalStudio\AI\OpenAI\Support\OpenAIUtils;
 use BengalStudio\AI\Contracts\LanguageModel;
 use BengalStudio\AI\Types\LanguageModelCallOptions;
 use BengalStudio\AI\Types\LanguageModelGenerateResult;

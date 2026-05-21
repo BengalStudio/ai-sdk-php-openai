@@ -20,7 +20,7 @@ if (file_exists($envFile)) {
     }
 }
 
-use function AISdkPhp\OpenAI\createOpenAI;
+use function BengalStudio\AI\OpenAI\createOpenAI;
 use function BengalStudio\AI\generateText;
 
 $apiKey = $_ENV['OPENAI_API_KEY'] ?? getenv('OPENAI_API_KEY');

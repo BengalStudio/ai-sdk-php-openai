@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AISdkPhp\OpenAI\Tests\Chat;
+namespace BengalStudio\AI\OpenAI\Tests\Chat;
 
-use AISdkPhp\OpenAI\Chat\OpenAIChatMessageConverter;
+use BengalStudio\AI\OpenAI\Chat\OpenAIChatMessageConverter;
 use BengalStudio\AI\Types\Message;
 use PHPUnit\Framework\TestCase;
 

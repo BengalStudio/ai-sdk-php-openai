@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace AISdkPhp\OpenAI\Embedding;
+namespace BengalStudio\AI\OpenAI\Embedding;
 
-use AISdkPhp\OpenAI\Support\OpenAIConfig;
-use AISdkPhp\OpenAI\Support\OpenAIErrorHandler;
-use AISdkPhp\OpenAI\Support\OpenAIUtils;
+use BengalStudio\AI\OpenAI\Support\OpenAIConfig;
+use BengalStudio\AI\OpenAI\Support\OpenAIErrorHandler;
+use BengalStudio\AI\OpenAI\Support\OpenAIUtils;
 use BengalStudio\AI\Contracts\EmbeddingModel;
 use BengalStudio\AI\Exceptions\TooManyEmbeddingValuesException;
 use BengalStudio\AI\Types\EmbeddingModelCallOptions;

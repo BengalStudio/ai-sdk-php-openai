@@ -1,6 +1,6 @@
 # Architecture — OpenAI Provider
 
-An overview of how the `ai-sdk-php/openai` package is structured.
+An overview of how the `bengal-studio/ai-sdk-openai` package is structured.
 
 ## Design
 

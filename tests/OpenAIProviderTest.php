@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace AISdkPhp\OpenAI\Tests;
+namespace BengalStudio\AI\OpenAI\Tests;
 
-use AISdkPhp\OpenAI\Chat\OpenAIChatLanguageModel;
-use AISdkPhp\OpenAI\Completion\OpenAICompletionLanguageModel;
-use AISdkPhp\OpenAI\Embedding\OpenAIEmbeddingModel;
-use AISdkPhp\OpenAI\OpenAIProvider;
-use AISdkPhp\OpenAI\OpenAIProviderSettings;
-use AISdkPhp\OpenAI\Responses\OpenAIResponsesLanguageModel;
+use BengalStudio\AI\OpenAI\Chat\OpenAIChatLanguageModel;
+use BengalStudio\AI\OpenAI\Completion\OpenAICompletionLanguageModel;
+use BengalStudio\AI\OpenAI\Embedding\OpenAIEmbeddingModel;
+use BengalStudio\AI\OpenAI\OpenAIProvider;
+use BengalStudio\AI\OpenAI\OpenAIProviderSettings;
+use BengalStudio\AI\OpenAI\Responses\OpenAIResponsesLanguageModel;
 use BengalStudio\AI\Contracts\EmbeddingModel;
 use BengalStudio\AI\Contracts\LanguageModel;
 use BengalStudio\AI\Contracts\Provider;

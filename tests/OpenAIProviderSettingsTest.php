@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AISdkPhp\OpenAI\Tests;
+namespace BengalStudio\AI\OpenAI\Tests;
 
-use AISdkPhp\OpenAI\OpenAIProviderSettings;
+use BengalStudio\AI\OpenAI\OpenAIProviderSettings;
 use PHPUnit\Framework\TestCase;
 
 class OpenAIProviderSettingsTest extends TestCase

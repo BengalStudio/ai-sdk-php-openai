@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AISdkPhp\OpenAI\Chat;
+namespace BengalStudio\AI\OpenAI\Chat;
 
 use BengalStudio\AI\Types\Message;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AISdkPhp\OpenAI\Support;
+namespace BengalStudio\AI\OpenAI\Support;
 
 use BengalStudio\AI\Types\FinishReason;
 

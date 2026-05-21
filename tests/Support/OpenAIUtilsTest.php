@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AISdkPhp\OpenAI\Tests\Support;
+namespace BengalStudio\AI\OpenAI\Tests\Support;
 
-use AISdkPhp\OpenAI\Support\OpenAIUtils;
+use BengalStudio\AI\OpenAI\Support\OpenAIUtils;
 use BengalStudio\AI\Types\FinishReason;
 use PHPUnit\Framework\TestCase;
 

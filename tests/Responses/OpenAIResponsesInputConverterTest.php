@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AISdkPhp\OpenAI\Tests\Responses;
+namespace BengalStudio\AI\OpenAI\Tests\Responses;
 
-use AISdkPhp\OpenAI\Responses\OpenAIResponsesInputConverter;
+use BengalStudio\AI\OpenAI\Responses\OpenAIResponsesInputConverter;
 use BengalStudio\AI\Types\Message;
 use PHPUnit\Framework\TestCase;
 

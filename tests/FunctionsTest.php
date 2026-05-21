@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace AISdkPhp\OpenAI\Tests;
+namespace BengalStudio\AI\OpenAI\Tests;
 
-use AISdkPhp\OpenAI\Chat\OpenAIChatLanguageModel;
-use AISdkPhp\OpenAI\Completion\OpenAICompletionLanguageModel;
-use AISdkPhp\OpenAI\Embedding\OpenAIEmbeddingModel;
-use AISdkPhp\OpenAI\OpenAIProvider;
-use AISdkPhp\OpenAI\Responses\OpenAIResponsesLanguageModel;
+use BengalStudio\AI\OpenAI\Chat\OpenAIChatLanguageModel;
+use BengalStudio\AI\OpenAI\Completion\OpenAICompletionLanguageModel;
+use BengalStudio\AI\OpenAI\Embedding\OpenAIEmbeddingModel;
+use BengalStudio\AI\OpenAI\OpenAIProvider;
+use BengalStudio\AI\OpenAI\Responses\OpenAIResponsesLanguageModel;
 use PHPUnit\Framework\TestCase;
 
-use function AISdkPhp\OpenAI\createOpenAI;
-use function AISdkPhp\OpenAI\openai;
+use function BengalStudio\AI\OpenAI\createOpenAI;
+use function BengalStudio\AI\OpenAI\openai;
 
 class FunctionsTest extends TestCase
 {

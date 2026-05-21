@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AISdkPhp\OpenAI;
+namespace BengalStudio\AI\OpenAI;
 
 /**
  * Configuration settings for creating an OpenAI provider instance.

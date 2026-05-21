@@ -1,6 +1,6 @@
 # AI SDK PHP - OpenAI Provider
 
-The **OpenAI provider** for the [AI SDK PHP](https://github.com/bengal-studio/ai-sdk-php) package. It provides language model and embedding model support for the OpenAI API, including:
+The **OpenAI provider** for the [AI SDK PHP](https://github.com/bengal-studio/ai-sdk) package. It provides language model and embedding model support for the OpenAI API, including:
 
 - **Chat Completions** (`/v1/chat/completions`)
 - **Responses** (`/v1/responses`) — default, most feature-rich
@@ -10,7 +10,7 @@ The **OpenAI provider** for the [AI SDK PHP](https://github.com/bengal-studio/ai
 ## Installation
 
 ```bash
-composer require ai-sdk-php/openai
+composer require bengal-studio/ai-sdk-openai
 ```
 
 ## Setup
@@ -26,7 +26,7 @@ OPENAI_API_KEY=sk-...
 ### Programmatic Configuration
 
 ```php
-use function AISdkPhp\OpenAI\createOpenAI;
+use function BengalStudio\AI\OpenAI\createOpenAI;
 
 $openai = createOpenAI([
     'apiKey' => 'sk-...',
@@ -45,7 +45,7 @@ The OpenAI provider supports multiple API surfaces for text generation.
 The [Responses API](https://platform.openai.com/docs/api-reference/responses) is the default and most capable API. It supports web search, file search, code interpreter, image generation, MCP tools, and more.
 
 ```php
-use function AISdkPhp\OpenAI\openai;
+use function BengalStudio\AI\OpenAI\openai;
 use function BengalStudio\AI\generateText;
 
 // Using the convenience function
@@ -146,7 +146,7 @@ $result = generateText([
 Use the `chat:` prefix or the `chat()` factory method for the Chat Completions API.
 
 ```php
-use function AISdkPhp\OpenAI\openai;
+use function BengalStudio\AI\OpenAI\openai;
 
 // Using prefix
 $model = openai('chat:gpt-4.1');
@@ -244,7 +244,7 @@ $result = generateText([
 
 ```php
 use function BengalStudio\AI\embed;
-use function AISdkPhp\OpenAI\openai;
+use function BengalStudio\AI\OpenAI\openai;
 
 $provider = openai();
 $model = $provider->embedding('text-embedding-3-small');

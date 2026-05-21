@@ -5,7 +5,7 @@ Practical examples for common use cases with the OpenAI provider.
 ## Basic Text Generation
 
 ```php
-use function AISdkPhp\OpenAI\openai;
+use function BengalStudio\AI\OpenAI\openai;
 use function BengalStudio\AI\generateText;
 
 $result = generateText([
@@ -149,7 +149,7 @@ echo $result->text;
 use function BengalStudio\AI\embed;
 use function BengalStudio\AI\embedMany;
 use function BengalStudio\AI\cosineSimilarity;
-use function AISdkPhp\OpenAI\createOpenAI;
+use function BengalStudio\AI\OpenAI\createOpenAI;
 
 $provider = createOpenAI(['apiKey' => 'sk-...']);
 $model = $provider->embedding('text-embedding-3-small');
@@ -191,7 +191,7 @@ echo $result->getDimensions();  // 256 (instead of default 3072)
 ## Custom Base URL (OpenAI-Compatible API)
 
 ```php
-use function AISdkPhp\OpenAI\createOpenAI;
+use function BengalStudio\AI\OpenAI\createOpenAI;
 
 // Together AI
 $together = createOpenAI([
@@ -222,7 +222,7 @@ $result->pipeTextStreamToResponse(format: 'sse');
 
 ```php
 use function BengalStudio\AI\createProviderRegistry;
-use function AISdkPhp\OpenAI\createOpenAI;
+use function BengalStudio\AI\OpenAI\createOpenAI;
 
 $registry = createProviderRegistry([
     'openai' => createOpenAI(['apiKey' => 'sk-...']),
