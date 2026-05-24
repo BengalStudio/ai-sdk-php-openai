@@ -2,7 +2,7 @@
     "name": "bengal-studio/ai-sdk-openai",
     "description": "OpenAI provider for AI SDK PHP — Chat, Completion, Responses, and Embedding models.",
     "type": "library",
-    "license": "MIT",
+    "license": "GPL-2.0-or-later",
     "keywords": ["ai", "openai", "gpt", "chatgpt", "embeddings", "language-model", "ai-sdk"],
     "authors": [
         {

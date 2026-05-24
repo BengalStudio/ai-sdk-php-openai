@@ -324,4 +324,4 @@ $provider = createOpenAI([
 
 ## License
 
-MIT
+Licensed under the [GNU General Public License v2.0 or later](./LICENSE.md), matching the parent [`bengal-studio/ai-sdk`](https://github.com/BengalStudio/ai-sdk-php).
