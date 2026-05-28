@@ -8,6 +8,8 @@ use BengalStudio\AI\OpenAI\Chat\OpenAIChatMessageConverter;
 use BengalStudio\AI\Types\Message;
 use PHPUnit\Framework\TestCase;
 
+use function BengalStudio\AI\convertToModelMessages;
+
 class OpenAIChatMessageConverterTest extends TestCase
 {
     // System messages
@@ -247,6 +249,61 @@ class OpenAIChatMessageConverterTest extends TestCase
         $this->assertSame('user', $result['messages'][1]['role']);
         $this->assertSame('assistant', $result['messages'][2]['role']);
         $this->assertSame('tool', $result['messages'][3]['role']);
+    }
+
+    // End-to-end: AI SDK v5+ UI messages → convertToModelMessages → OpenAI wire
+
+    /**
+     * Replaying a persisted assistant turn that called a tool must reach the
+     * wire as an assistant message with `tool_calls` followed by a `role: tool`
+     * message whose `tool_call_id` matches — otherwise the model never sees the
+     * tool result on later turns. Guards the convertToModelMessages → OpenAI
+     * converter seam end-to-end.
+     */
+    public function testToolRoundTripFromUiMessages(): void
+    {
+        $uiMessages = [
+            [
+                'id' => 'm1',
+                'role' => 'user',
+                'parts' => [['type' => 'text', 'text' => 'Weather in SF?']],
+            ],
+            [
+                'id' => 'm2',
+                'role' => 'assistant',
+                'parts' => [
+                    ['type' => 'text', 'text' => 'Checking.'],
+                    [
+                        'type' => 'tool-get_weather',
+                        'toolCallId' => 'call_rt',
+                        'state' => 'output-available',
+                        'input' => ['city' => 'SF'],
+                        'output' => ['temp' => 68],
+                    ],
+                ],
+            ],
+        ];
+
+        $result = OpenAIChatMessageConverter::convert(convertToModelMessages($uiMessages), 'system');
+        $wire = $result['messages'];
+
+        // user, assistant (tool_calls), tool
+        $this->assertCount(3, $wire);
+        $this->assertSame('user', $wire[0]['role']);
+
+        $assistant = $wire[1];
+        $this->assertSame('assistant', $assistant['role']);
+        $this->assertSame('Checking.', $assistant['content']);
+        $this->assertCount(1, $assistant['tool_calls']);
+        $this->assertSame('call_rt', $assistant['tool_calls'][0]['id']);
+        $this->assertSame('get_weather', $assistant['tool_calls'][0]['function']['name']);
+        $this->assertSame('{"city":"SF"}', $assistant['tool_calls'][0]['function']['arguments']);
+
+        $tool = $wire[2];
+        $this->assertSame('tool', $tool['role']);
+        // The linkage OpenAI requires: tool message answers the assistant call.
+        $this->assertSame($assistant['tool_calls'][0]['id'], $tool['tool_call_id']);
+        $this->assertSame('{"temp":68}', $tool['content']);
     }
 
     /**
