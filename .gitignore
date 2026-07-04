@@ -28,7 +28,5 @@ Thumbs.db
 .env
 .env.local
 
-# Internal planning & review docs
-/*_PLAN.md
-/*REVIEW.md
+# Internal planning & review docs (entire folder — dev-only, never ships)
 /plans/
