@@ -18,7 +18,7 @@
     ],
     "require": {
         "php": "^8.1",
-        "bengal-studio/ai-sdk": "dev-main",
+        "bengal-studio/ai-sdk": "^1.0 || dev-main",
         "guzzlehttp/guzzle": "^7.0"
     },
     "require-dev": {
